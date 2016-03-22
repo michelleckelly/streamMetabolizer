@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Streammetabolizer by USGS-R</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Streammetabolizer</h1>
+          <h2>stream metabolism R package</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/USGS-R/streamMetabolizer/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/USGS-R/streamMetabolizer/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/USGS-R/streamMetabolizer" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="streammetabolizer" class="anchor" href="#streammetabolizer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>streamMetabolizer</h1>
+
+<p>stream metabolism R package</p>
+
+<h2>
+<a id="status" class="anchor" href="#status" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Status</h2>
+
+<p>This package is in development. We are using it for our own early applications and welcome bold, flexible, resilient new users who can help us make the package better. Please contact us if you might be one of those.</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">Name</th>
+<th align="left">Status (develop branch)</th>
+<th align="left">Status (master branch)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Linux Build:</td>
+<td align="left"><a href="https://travis-ci.org/USGS-R/streamMetabolizer/branches"><img src="https://travis-ci.org/USGS-R/streamMetabolizer.svg?branch=develop" alt="develop Build Status"></a></td>
+<td align="left"><a href="https://travis-ci.org/USGS-R/streamMetabolizer/branches"><img src="https://travis-ci.org/USGS-R/streamMetabolizer.svg?branch=master" alt="master Build Status"></a></td>
+</tr>
+<tr>
+<td align="left">Windows Build:</td>
+<td align="left"><a href="https://ci.appveyor.com/project/jread-usgs/streammetabolizer/branch/develop"><img src="https://ci.appveyor.com/api/projects/status/n2u0tpmkaetj7kjp/branch/develop?svg=true" alt="develop Build status"></a></td>
+<td align="left"><a href="https://ci.appveyor.com/project/jread-usgs/streammetabolizer/branch/master"><img src="https://ci.appveyor.com/api/projects/status/n2u0tpmkaetj7kjp/branch/master?svg=true" alt="master Build status"></a></td>
+</tr>
+<tr>
+<td align="left">Package Tests:</td>
+<td align="left"><a href="https://coveralls.io/github/USGS-R/streamMetabolizer?branch=develop"><img src="https://coveralls.io/repos/github/USGS-R/streamMetabolizer/badge.svg?branch=develop" alt="develop Coverage Status"></a></td>
+<td align="left"><a href="https://coveralls.io/github/USGS-R/streamMetabolizer?branch=master"><img src="https://coveralls.io/repos/github/USGS-R/streamMetabolizer/badge.svg?branch=master" alt="master Coverage Status"></a></td>
+</tr>
+<tr>
+<td align="left">Priorities:</td>
+<td align="left">
+<a href="https://waffle.io/USGS-R/streamMetabolizer"><img src="https://badge.waffle.io/USGS-R/streamMetabolizer.png?label=ready&amp;title=Ready" alt="Issues Ready to Address"></a> <a href="https://waffle.io/USGS-R/streamMetabolizer"><img src="https://badge.waffle.io/USGS-R/streamMetabolizer.png?label=In%20Progress&amp;title=In%20Progress" alt="Issues in Progress"></a>
+</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>The most stable+current version of this package can be installed with this R command:</p>
+
+<div class="highlight highlight-source-r"><pre>install.packages(<span class="pl-s"><span class="pl-pds">"</span>streamMetabolizer<span class="pl-pds">"</span></span>, <span class="pl-v">dependencies</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>, 
+  <span class="pl-v">repos</span><span class="pl-k">=</span>c(<span class="pl-s"><span class="pl-pds">"</span>http://owi.usgs.gov/R<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>https://cran.rstudio.com<span class="pl-pds">"</span></span>))</pre></div>
+
+<p>and updated with this command:</p>
+
+<div class="highlight highlight-source-r"><pre>update.packages(<span class="pl-v">oldPkgs</span><span class="pl-k">=</span>c(<span class="pl-s"><span class="pl-pds">"</span>streamMetabolizer<span class="pl-pds">"</span></span>,<span class="pl-s"><span class="pl-pds">"</span>unitted<span class="pl-pds">"</span></span>),
+  <span class="pl-v">dependencies</span><span class="pl-k">=</span><span class="pl-c1">TRUE</span>, <span class="pl-v">repos</span><span class="pl-k">=</span>c(<span class="pl-s"><span class="pl-pds">"</span>http://owi.usgs.gov/R<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>https://cran.rstudio.com<span class="pl-pds">"</span></span>))</pre></div>
+
+<p>The most cutting edge version of the package can be installed if you have the <code>devtools</code> package:</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-e">devtools</span><span class="pl-k">::</span>install_github(<span class="pl-s"><span class="pl-pds">"</span>USGS-R/streamMetabolizer<span class="pl-pds">"</span></span>, <span class="pl-v">ref</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>develop<span class="pl-pds">"</span></span>)</pre></div>
+
+<h2>
+<a id="disclaimer" class="anchor" href="#disclaimer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disclaimer</h2>
+
+<p>This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the official USGS copyright policy at <a href="http://www.usgs.gov/visual-id/credit_usgs.html#copyright">http://www.usgs.gov/visual-id/credit_usgs.html#copyright</a></p>
+
+<p>This information is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The information has not received final approval by the U.S. Geological Survey (USGS) and is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the information. Although this software program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.</p>
+
+<p>This software is provided "AS IS."</p>
+
+<p><a href="http://creativecommons.org/publicdomain/zero/1.0/">
+    <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC0">
+  </a></p>
+        </section>
+
+        <footer>
+          Streammetabolizer is maintained by <a href="https://github.com/USGS-R">USGS-R</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
