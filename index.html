@@ -1,64 +1,83 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <title>streamMetabolizer by USGS-R</title>
-  </head>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+  <!--[if lt IE 9]>
+  <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <title>streamMetabolizer by USGS-R</title>
+</head>
 
-  <body>
-    <div id="container">
-      <div class="inner">
+<body>
+  <div id="container">
+    <div class="inner">
 
-        <header>
-          <h1>streamMetabolizer</h1>
-          <h2>Stream metabolism R package</h2>
-        </header>
+      <header>
+        <h1>streamMetabolizer</h1>
+        <h2>Models for Estimating Aquatic Photosynthesis and Respiration</h2>
+        <p>Alison P. Appling, Robert O. Hall, Jr., Maite Arroita, and Charles B. Yackulic</p>
+        <p>Code on GitHub: <a href="https://github.com/USGS-R/streamMetabolizer">https://github.com/USGS-R/streamMetabolizer</a></p>
+      </header>
 
-        <section id="main_content">
+<section id="main_content">
+
+<p>The streamMetabolizer R package uses inverse modeling to estimate aquatic
+    photosynthesis and respiration (collectively, metabolism) from time series
+    data on dissolved oxygen, water temperature, depth, and light. The package
+    assists with data preparation, handles data gaps during modeling, and
+    provides tabular and graphical reports of model outputs. Several
+    time-honored methods are implemented along with many promising new variants
+    that produce more accurate and precise metabolism estimates.</p>
+
+<!-- Tutorials -->
 
 <h2><a id="Tutorials" class="anchor" href="#tutorials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tutorials</h2>
+<ul>
+  <li><a href="installation.html">Installation</a></li>
+  <li><a href="get_started.html">Quickstart</a></li>
+  <li><a href="data_prep.html">Data Preparation</a></li>
+  <li><a href="model_structures.html">Model Structures</a></li>
+  <li><a href="models_bayes.html">Bayesian Models</a></li>
+  <li><a href="models_mle.html">MLE Models</a></li>
+  <li><a href="gpp_er_eqs.html">MLE Models - GPP and ER Equations</a></li>
+  <li><a href="ode_methods.html">MLE Models - ODE Methods</a></li>
+  <li><a href="simulations.html">Simulation Models</a></li>
+</ul>
 
-<section id="downloads" class="clearfix">
-  <ul>
-    <li><a href="get_started.html">Get Started</a></li>
-    <li><a href="data_prep.html">Data Prep</a></li>
-    <li><a href="gpp_er_eqs.html">GPP and ER Equations</a></li>
-    <li><a href="ode_methods.html">ODE Methods</a></li>
-    <li><a href="simulations.html">Simulations</a></li>
-  </ul>
+
+<!-- Citation -->
+
+<h2><a id="Citation" class="anchor" href="#citation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Citation</h2>
+<p>To see the recommended citation for this package, please run <code>citation('streamMetabolizer')</code> at the R prompt. A corresponding manuscript is in review, and the publication citation will be added when it becomes available.</p>
+
+
+<!-- Support -->
+
+<h2><a id="Support" class="anchor" href="#support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support</h2>
+<p>Please give us feedback or raise questions at <a href="https://github.com/USGS-R/streamMetabolizer/issues/new">https://github.com/USGS-R/streamMetabolizer/issues/new</a>.</p>
+<p><code>streamMetabolizer</code> was developed 2015-2017 with support from the USGS Powell Center (through a working group on Continental Patterns of Stream Metabolism), the USGS NAWQA program, and the USGS Office of Water Information. Ongoing package work is unfunded and therefore limited, though still enthusiastic.</p>
+
+
+<!-- Disclaimer -->
+
+<h2><a id="disclaimer" class="anchor" href="#disclaimer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disclaimer</h2>
+<p>This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the official USGS copyright policy at <a href="http://www.usgs.gov/visual-id/credit_usgs.html#copyright">http://www.usgs.gov/visual-id/credit_usgs.html#copyright</a></p>
+<p>This information is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The information has not received final approval by the U.S. Geological Survey (USGS) and is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the information. Although this software program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.</p>
+<p>This software is provided "AS IS."</p>
+<p><a href="http://creativecommons.org/publicdomain/zero/1.0/"><img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC0"></a></p>
+      
 </section>
 
-<p>Please give us feedback at <a href="https://github.com/USGS-R/streamMetabolizer/issues/new">https://github.com/USGS-R/streamMetabolizer/issues/new</a>.</p>
+<!-- Footer -->
 
-<p>See the "Get Started" tutorial for installation instructions.</p>
+<footer>
+  streamMetabolizer is maintained by <a href="https://github.com/USGS-R">USGS-R</a><br>
+</footer>
 
-<h2>
-<a id="disclaimer" class="anchor" href="#disclaimer" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Disclaimer</h2>
-
-<p>This software is in the public domain because it contains materials that originally came from the U.S. Geological Survey, an agency of the United States Department of Interior. For more information, see the official USGS copyright policy at <a href="http://www.usgs.gov/visual-id/credit_usgs.html#copyright">http://www.usgs.gov/visual-id/credit_usgs.html#copyright</a></p>
-
-<p>This information is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The information has not received final approval by the U.S. Geological Survey (USGS) and is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the information. Although this software program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.</p>
-
-<p>This software is provided "AS IS."</p>
-
-<p><a href="http://creativecommons.org/publicdomain/zero/1.0/">
-    <img src="http://i.creativecommons.org/p/zero/1.0/88x31.png" alt="CC0">
-  </a></p>
-        </section>
-
-        <footer>
-          streamMetabolizer is maintained by <a href="https://github.com/USGS-R">USGS-R</a><br>
-        </footer>
-
-        
       </div>
     </div>
   </body>
