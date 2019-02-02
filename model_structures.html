@@ -12,14 +12,14 @@
 
 <meta name="author" content="Alison Appling" />
 
-<meta name="date" content="2018-01-19" />
+<meta name="date" content="2019-02-02" />
 
 <title>Model Structures</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -55,7 +55,29 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -70,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Model Structures</h1>
 <h4 class="author"><em>Alison Appling</em></h4>
-<h4 class="date"><em>2018-01-19</em></h4>
+<h4 class="date"><em>2019-02-02</em></h4>
 
 
 
@@ -109,12 +131,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Interpreting a model name</h1>
 <p>The <code>mm_parse_name()</code> function splits a cryptic model name into its component features. For example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mm_parse_name</span>(<span class="kw">c</span>(<span class="st">'b_np_oipi_tr_plrckm.stan'</span>, <span class="st">'m_np_pi_tr_psrqkm.nlm'</span>))</code></pre></div>
-<pre><code>##    type pool_K600 err_obs_iid err_proc_acor err_proc_iid ode_method  GPP_fun
-## 1 bayes      none        TRUE         FALSE         TRUE  trapezoid linlight
-## 2   mle      none       FALSE         FALSE         TRUE  trapezoid satlight
-##     ER_fun deficit_src engine
-## 1 constant      DO_mod   stan
-## 2  q10temp      DO_mod    nlm</code></pre>
+<pre><code>##    type pool_K600 err_obs_iid err_proc_acor err_proc_iid err_proc_GPP
+## 1 bayes      none        TRUE         FALSE         TRUE        FALSE
+## 2   mle      none       FALSE         FALSE         TRUE        FALSE
+##   ode_method  GPP_fun   ER_fun deficit_src engine
+## 1  trapezoid linlight constant      DO_mod   stan
+## 2  trapezoid satlight  q10temp      DO_mod    nlm</code></pre>
 <p>See the help file at <code>?mm_parse_name</code>, and refer again to <code>?mm_name</code> for definitions of the column names in the output of <code>mm_parse_name</code>.</p>
 </div>
 <div id="listing-all-the-options" class="section level1">
@@ -122,18 +144,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>You can see the full list of available model structures by calling <code>mm_valid_names()</code> (here we’ll just print a sampling of the full list):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">valid_names &lt;-<span class="st"> </span><span class="kw">mm_valid_names</span>(<span class="dt">type=</span><span class="kw">c</span>(<span class="st">'bayes'</span>,<span class="st">'mle'</span>,<span class="st">'night'</span>))
 <span class="kw">length</span>(valid_names)</code></pre></div>
-<pre><code>## [1] 620</code></pre>
+<pre><code>## [1] 882</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(valid_names[<span class="kw">seq</span>(<span class="dv">1</span>,<span class="kw">length</span>(valid_names),<span class="dt">length.out=</span><span class="dv">20</span>)], <span class="st">'...'</span>)</code></pre></div>
-<pre><code>##  [1] &quot;b_np_oipi_tr_plrckm.stan&quot;  &quot;b_Kbx_oipi_eu_plrcko.stan&quot;
-##  [3] &quot;b_Kl0_oi_tr_plrcko.stan&quot;   &quot;b_Kn_pi_tr_plrcko.stan&quot;   
-##  [5] &quot;b_np_oipi_eu_plrckm.stan&quot;  &quot;m_np_pi_o10_plrckm.nlm&quot;   
-##  [7] &quot;m_np_oi_o6_psrckm.nlm&quot;     &quot;m_np_pi_o2_pqrckm.nlm&quot;    
-##  [9] &quot;m_np_pi_tr_plrqkm.nlm&quot;     &quot;m_np_oi_o16_plrqkm.nlm&quot;   
-## [11] &quot;m_np_oi_o12_psrqkm.nlm&quot;    &quot;m_np_pi_o8_pqrqkm.nlm&quot;    
-## [13] &quot;m_np_pi_o3_plrcko.nlm&quot;     &quot;m_np_oi_r2_psrcko.nlm&quot;    
-## [15] &quot;m_np_pi_Eu_psrcko.nlm&quot;     &quot;m_np_pi_o13_pqrcko.nlm&quot;   
-## [17] &quot;m_np_oi_o10_plrqko.nlm&quot;    &quot;m_np_oi_o5_psrqko.nlm&quot;    
-## [19] &quot;m_np_pi_o1_pqrqko.nlm&quot;     &quot;n_np_pi_eu_rckf.lm&quot;       
+<pre><code>##  [1] &quot;b_np_oipi_tr_plrckm.stan&quot;  &quot;b_Kb0_oi_eu_psrckm.stan&quot;  
+##  [3] &quot;b_Kbx_oipi_eu_plrckm.stan&quot; &quot;b_Kl_oipi_tr_psrcko.stan&quot; 
+##  [5] &quot;b_Kl0_oipp_eu_plrcko.stan&quot; &quot;b_Klx_pi_eu_psrcko.stan&quot;  
+##  [7] &quot;b_Kn_pipp_tr_plrckm.stan&quot;  &quot;b_Knx_oi_eu_plrckm.stan&quot;  
+##  [9] &quot;b_np_oi_tr_psrcko.stan&quot;    &quot;m_np_oi_o6_plrckm.nlm&quot;    
+## [11] &quot;m_np_oi_o10_psrckm.nlm&quot;    &quot;m_np_pi_o13_pqrckm.nlm&quot;   
+## [13] &quot;m_np_pi_o16_plrqkm.nlm&quot;    &quot;m_np_pi_tr_pqrqkm.nlm&quot;    
+## [15] &quot;m_np_oi_o2_plrcko.nlm&quot;     &quot;m_np_oi_o5_psrcko.nlm&quot;    
+## [17] &quot;m_np_oi_o9_pqrcko.nlm&quot;     &quot;m_np_pi_o12_plrqko.nlm&quot;   
+## [19] &quot;m_np_pi_o15_psrqko.nlm&quot;    &quot;n_np_pi_eu_rckf.lm&quot;       
 ## [21] &quot;...&quot;</code></pre>
 </div>
 <div id="using-a-model-name" class="section level1">
