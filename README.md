@@ -1,3 +1,9 @@
+----
+
+_This is a fork of USGS-R/streamMetabolizer that is modified to include functions for modeling two-station metabolism using MLE. This fork is intended to be used in conjunction with michelleckelly/neonMetabolizer for modeling two-station metabolism from NEON data. Everything is in active development, so use at your own risk :) -Michelle_
+
+----
+
 # streamMetabolizer
 
 ## Models for Estimating Aquatic Photosynthesis and Respiration
