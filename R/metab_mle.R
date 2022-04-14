@@ -51,27 +51,6 @@ metab_mle <- function(
   }
   if(mm_parse_name(specs$model_name)$ode_method %in% c('lsoda','lsodes','lsodar'))
     warning("we've seen bad results with ODE methods 'lsoda', 'lsodes', and 'lsodar'. Use at your own risk")
-
-  if("horizontalPosition" %in% colnames(data))){
-    # Check if this is a two-station dataset. If so, rename and reorganize some 
-    # columns
-    Up <- data %>% filter(horizontalPosition == "S1")
-    Down <- data %>% filter(horizontalPosition == "S2")
-    # From the upstream dataset, we need Oup and Osatup
-    Up <- Up %>% 
-      distinct(solar.time, .keep_all = TRUE) %>%
-      select(solar.time, DO.obs, DO.sat) %>%
-      rename(DO.obs.up = DO.obs, DO.sat.up = DO.sat)
-    # From the downstream dataset, we need Odown, Osatdown, and all other 
-    # sensor parameters measured at sensor S2
-    Down <- Down %>% 
-      distinct(solar.time, .keep_all = TRUE) %>%
-      select(solar.time, DO.obs, DO.sat, depth, temp.water, light, 
-             discharge) %>%
-      rename(DO.obs.down = DO.obs, DO.sat.down = DO.sat)
-    # Merge dataframes
-    data <- merge(Down, Up, by = "solar.time")
-  }
   
   fitting_time <- system.time({
     if("DO.obs" %in% colnames(data)){
