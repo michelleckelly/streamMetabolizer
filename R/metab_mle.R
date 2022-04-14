@@ -52,12 +52,41 @@ metab_mle <- function(
   if(mm_parse_name(specs$model_name)$ode_method %in% c('lsoda','lsodes','lsodar'))
     warning("we've seen bad results with ODE methods 'lsoda', 'lsodes', and 'lsodar'. Use at your own risk")
 
+  if("horizontalPosition" %in% colnames(data))){
+    # Check if this is a two-station dataset. If so, rename and reorganize some 
+    # columns
+    Up <- data %>% filter(horizontalPosition == "S1")
+    Down <- data %>% filter(horizontalPosition == "S2")
+    # From the upstream dataset, we need Oup and Osatup
+    Up <- Up %>% 
+      distinct(solar.time, .keep_all = TRUE) %>%
+      select(solar.time, DO.obs, DO.sat) %>%
+      rename(DO.obs.up = DO.obs, DO.sat.up = DO.sat)
+    # From the downstream dataset, we need Odown, Osatdown, and all other 
+    # sensor parameters measured at sensor S2
+    Down <- Down %>% 
+      distinct(solar.time, .keep_all = TRUE) %>%
+      select(solar.time, DO.obs, DO.sat, depth, temp.water, light, 
+             discharge) %>%
+      rename(DO.obs.down = DO.obs, DO.sat.down = DO.sat)
+    # Merge dataframes
+    data <- merge(Down, Up, by = "solar.time")
+  }
+  
   fitting_time <- system.time({
-    # Check data for correct column names & units
-    dat_list <- mm_validate_data(if(missing(data)) NULL else data, if(missing(data_daily)) NULL else data_daily, "metab_mle")
-    data <- v(dat_list[['data']])
-    data_daily <- v(dat_list[['data_daily']])
-
+    if("DO.obs" %in% colnames(data)){
+      # NOTE: bypassing the correct column names & units check here if the
+      # data is from a two-station dataset. Purely because I don't want to bother
+      # with adjusting mm_validate_data right now - will need to go back and fix 
+      # this at some point
+      
+      # Check data for correct column names & units
+      dat_list <- mm_validate_data(if(missing(data)) NULL else data, if(missing(data_daily)) NULL else data_daily, "metab_mle")
+      
+      data <- v(dat_list[['data']])
+      data_daily <- v(dat_list[['data_daily']])
+      } 
+    
     # model the data, splitting into overlapping 31.5-hr 'plys' for each date
     mle_all <- mm_model_by_ply(
       mle_1ply, data=data, data_daily=data_daily, # for mm_model_by_ply
