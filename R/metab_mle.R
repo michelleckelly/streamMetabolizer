@@ -37,7 +37,7 @@ NULL
 #' @family metab_model
 metab_mle <- function(
   specs=specs(mm_name('mle')),
-  data=mm_data(solar.time, DO.obs, DO.sat, depth, temp.water, light, discharge, optional='discharge'),
+  data=mm_data(solar.time, DO.obs, DO.sat, depth, temp.water, light, discharge, optional=c('discharge', 'horizontalPosition')),
   data_daily=mm_data(
     date, K600.daily, init.GPP.daily, init.Pmax, init.alpha,
     init.ER.daily, init.ER20, init.K600.daily, optional='all'),
