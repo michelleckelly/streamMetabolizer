@@ -189,17 +189,33 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
   data$err.proc <- err.proc # get replication if needed
   if(integer.t) {
     # for indexing, converting df columns to vectors speeds things up by 40x
-    DO.obs <- data$DO.obs
-    DO.sat <- data$DO.sat
+    DO.obs <- data$DO.obs # for single-station
+    DO.sat <- data$DO.sat # for single-station
+    DO.obs.down <- data$DO.obs.down # two-station
+    DO.obs.up <- data$DO.obs.up # two-station
+    DO.sat.down <- data$DO.sat.down # two-station
+    DO.sat.up <- data$DO.sat.up # two-station
+    # travel time has got to be in day-1 for the units to work out
+    # tt reported back by clean_NEON is in seconds
+    tt <- data$tt/86400 # two-station
     temp.water <- data$temp.water
     depth <- data$depth
     light <- data$light
     KO2.conv <- data$KO2.conv
     err.proc <- data$err.proc
+    if(is.null(DO.obs)){ # If two station, calculate lag time
+      # Time difference between sensor readings in seconds
+      tdif <- as.numeric(data$solar.time[2] - data$solar.time[1], 
+                               units = "days")
+      # Divide travel time (tt, seconds) by tdif (sec) to get lag time (unitless)
+      lag <- round(mean(tt)/tdif)
+    }
   } else {
     # other methods require functions that can be applied at non-integer
     # values of t. approxfun is pretty darn fast and ever-so-slightly faster
     # with data$x than with independent vectors of t and a variable
+    
+    # NOTE: these other methods will need fixing for two-station. skipping for now
     DO.obs <- approxfun(data$t, data$DO.obs, rule=2)
     DO.sat <- approxfun(data$t, data$DO.sat, rule=2)
     depth <- approxfun(data$t, data$depth, rule=2)
@@ -226,10 +242,19 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
         mean(data$light[in.solar.day]))
       if(mean.light == 0) mean.light <- 1
       metab.needs <<- c(metab.needs, 'GPP.daily')
-      if(integer.t) function(t, metab.pars) {
-        metab.pars[['GPP.daily']] * light[t] / mean.light
-      } else function(t, metab.pars) {
-        metab.pars[['GPP.daily']] * light(t) / mean.light
+      if(is.null(DO.obs)){ # if two-station data
+        if(integer.t) function(t, metab.pars) { 
+          # This equation follows the two-station equation in Hall et al 2016
+          metab.pars[['GPP.daily']] * mean(light[t:(t+lag)]) / mean.light
+        } else function(t, metab.pars) {
+          metab.pars[['GPP.daily']] * light(t:(t+lag)) / mean.light
+        }
+      } else { # else single-station data
+        if(integer.t) function(t, metab.pars) {
+          metab.pars[['GPP.daily']] * light[t] / mean.light
+        } else function(t, metab.pars) {
+          metab.pars[['GPP.daily']] * light(t) / mean.light
+        }
       }
     })(),
     satlight=(function(){
@@ -256,8 +281,12 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
     ER_fun,
     constant=(function(){
       metab.needs <<- c(metab.needs, 'ER.daily')
-      function(t, metab.pars) {
-        metab.pars[['ER.daily']]
+      if(is.null(DO.obs)) { # two-station
+        metab.pars[['ER.daily']] * tt[t]
+      } else { # single-station
+        function(t, metab.pars) {
+          metab.pars[['ER.daily']]
+        }
       }
     })(),
     q10temp=(function(){
@@ -273,14 +302,23 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
   )
 
   # D: instantaneous reaeration rate at time t in gO2 m^-3 d^-1
+  # NOTE: D calculation will be different between two-station and single-station
   D <- switch(
     deficit_src,
     DO_obs=(function(){
       metab.needs <<- c(metab.needs, 'K600.daily')
-      if(integer.t) function(t, metab.pars, DO.mod.t) {
-        metab.pars[['K600.daily']] * KO2.conv[t] * (DO.sat[t] - DO.obs[t])
-      } else function(t, metab.pars, DO.mod.t) {
-        metab.pars[['K600.daily']] * KO2.conv(t) * (DO.sat(t) - DO.obs(t))
+      if(is.null(DO.obs)){ # if two-station data
+        if(integer.t) function(t, metab.pars, DO.mod.t) {
+          (metab.pars[['K600.daily']] * KO2.conv[t] * tt[t] * (DO.sat.up[t] - DO.obs.up[t] + DO.sat.down[t+lag])/2) / (1 + (metab.pars[['K600.daily']] * KO2.conv[t] * tt[t])/2)
+        } else function(t, metab.pars, DO.mod.t) {
+          (metab.pars[['K600.daily']] * KO2.conv(t) * tt(t) * (DO.sat.up(t) - DO.obs.up(t) + DO.sat.down(t+lag))/2) / (1 + (metab.pars[['K600.daily']] * KO2.conv(t) * tt(t))/2)
+        }
+      } else { # else single-staton
+        if(integer.t) function(t, metab.pars, DO.mod.t) {
+          metab.pars[['K600.daily']] * KO2.conv[t] * (DO.sat[t] - DO.obs[t])
+        } else function(t, metab.pars, DO.mod.t) {
+          metab.pars[['K600.daily']] * KO2.conv(t) * (DO.sat(t) - DO.obs(t))
+        }
       }
     })(),
     DO_obs_filter=,
