@@ -37,7 +37,7 @@ NULL
 #' @family metab_model
 metab_mle <- function(
   specs=specs(mm_name('mle')),
-  data=mm_data(solar.time, DO.obs, DO.sat, depth, temp.water, light, discharge, optional=c('discharge', 'horizontalPosition')),
+  data=mm_data(solar.time, DO.obs, DO.sat, depth, temp.water, light, discharge, optional=c('discharge', 'DO.obs')),
   data_daily=mm_data(
     date, K600.daily, init.GPP.daily, init.Pmax, init.alpha,
     init.ER.daily, init.ER20, init.K600.daily, optional='all'),
@@ -53,18 +53,18 @@ metab_mle <- function(
     warning("we've seen bad results with ODE methods 'lsoda', 'lsodes', and 'lsodar'. Use at your own risk")
   
   fitting_time <- system.time({
-    if("DO.obs" %in% colnames(data)){
+    if("DO.obs" %in% colnames(data)){ # if single-station
+      # Check data for correct column names & units
+      dat_list <- mm_validate_data(if(missing(data)) NULL else data, if(missing(data_daily)) NULL else data_daily, "metab_mle")
+    } else {
       # NOTE: bypassing the correct column names & units check here if the
       # data is from a two-station dataset. Purely because I don't want to bother
       # with adjusting mm_validate_data right now - will need to go back and fix 
       # this at some point
-      
-      # Check data for correct column names & units
-      dat_list <- mm_validate_data(if(missing(data)) NULL else data, if(missing(data_daily)) NULL else data_daily, "metab_mle")
-      
-      data <- v(dat_list[['data']])
-      data_daily <- v(dat_list[['data_daily']])
-      } 
+      dat_list <- list(data = data, data_daily = data_daily)
+      }
+    data <- v(dat_list[['data']])
+    data_daily <- v(dat_list[['data_daily']])
     
     # model the data, splitting into overlapping 31.5-hr 'plys' for each date
     mle_all <- mm_model_by_ply(
