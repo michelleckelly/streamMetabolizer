@@ -281,12 +281,10 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
     ER_fun,
     constant=(function(){
       metab.needs <<- c(metab.needs, 'ER.daily')
-      if(is.null(DO.obs)) { # two-station
+      if(is.null(DO.obs)) function(t, metab.pars) { # two-station
         metab.pars[['ER.daily']] * tt[t]
-      } else { # single-station
-        function(t, metab.pars) {
+      } else function(t, metab.pars) { # single-station
           metab.pars[['ER.daily']]
-        }
       }
     })(),
     q10temp=(function(){
