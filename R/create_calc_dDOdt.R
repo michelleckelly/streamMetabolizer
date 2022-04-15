@@ -275,13 +275,6 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
     })(),
     stop('unrecognized GPP_fun')
   )
-
-  if(integer.t) function(t, metab.pars) { 
-    # This equation follows the two-station equation in Hall et al 2016
-    metab.pars[['GPP.daily']] * mean(light[t:(t+lag)]) / mean.light
-  } else function(t, metab.pars) {
-    metab.pars[['GPP.daily']] * light(t:(t+lag)) / mean.light
-  }
   
   # ER: instantaneous ecosystem respiration at time t in d^-1
   ER <- switch(
