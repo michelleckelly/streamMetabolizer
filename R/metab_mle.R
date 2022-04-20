@@ -195,7 +195,11 @@ mle_1ply <- function(
         fscale = -(1/timestep_days),
         hessian = TRUE),
       if(fix_K600) list(K600.daily = K600),
-      list(DO.mod.1 = data_ply$DO.obs[1])
+      if(is.null(data_ply$DO.obs[1])){ # two-station
+        list(DO.mod.1 = data_ply$DO.obs.down[1])
+      } else { # single-station
+        list(DO.mod.1 = data_ply$DO.obs[1])
+      }
     )
 
     # Find the best metabolism values by non-linear minimization of the likelihood
