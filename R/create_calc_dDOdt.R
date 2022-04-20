@@ -245,9 +245,9 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
       if(is.null(DO.obs)){ # if two-station data
         if(integer.t) function(t, metab.pars) { 
           # This equation follows the two-station equation in Hall et al 2016
-          metab.pars[['GPP.daily']] * mean(light[t:(t+lag)]) / mean.light
+          DO.obs.up[t] + (metab.pars[['GPP.daily']] / depth[t] * mean(light[t:(t+lag)]) / mean.light)
         } else function(t, metab.pars) {
-          metab.pars[['GPP.daily']] * light(t:(t+lag)) / mean.light
+          DO.obs.up(t) + (metab.pars[['GPP.daily']] / depth(t) * mean(light(t:(t+lag))) / mean.light)
         }
       } else { # else single-station data
         if(integer.t) function(t, metab.pars) {
@@ -311,7 +311,7 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
       metab.needs <<- c(metab.needs, 'K600.daily')
       if(is.null(DO.obs)){ # if two-station data
         if(integer.t) function(t, metab.pars, DO.mod.t) {
-          (DO.obs.up[t] + metab.pars[['K600.daily']] * KO2.conv[t] * tt[t] * (DO.sat.up[t] - DO.obs.up[t] + DO.sat.down[t+lag])/2) / (1 + (metab.pars[['K600.daily']] * KO2.conv[t] * tt[t])/2)
+          ( + metab.pars[['K600.daily']] * KO2.conv[t] * tt[t] * (DO.sat.up[t] - DO.obs.up[t] + DO.sat.down[t+lag])/2) / (1 + (metab.pars[['K600.daily']] * KO2.conv[t] * tt[t])/2)
         } else function(t, metab.pars, DO.mod.t) {
           (DO.obs.up(t) + metab.pars[['K600.daily']] * KO2.conv(t) * tt(t) * (DO.sat.up(t) - DO.obs.up(t) + DO.sat.down(t+lag))/2) / (1 + (metab.pars[['K600.daily']] * KO2.conv(t) * tt(t))/2)
         }
