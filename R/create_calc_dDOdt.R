@@ -328,9 +328,9 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
       metab.needs <<- c(metab.needs, 'K600.daily')
       if(is.null(DO.obs)) { # if two-station data
         if(integer.t) function(t, metab.pars, DO.mod.t) {
-          (DO.mod.up[t] + metab.pars[['K600.daily']] * KO2.conv[t] * tt[t] * (DO.sat.up[t] - DO.mod.up[t] + DO.sat.down[t+lag])/2) / (1 + (metab.pars[['K600.daily']] * KO2.conv[t] * tt[t])/2)
+          metab.pars[['K600.daily']] * KO2.conv[t] * tt[t] * ((DO.sat.up[t] + DO.sat.down[t+lag])/2 - (DO.mod.up[t] + DO.mod.t[t+lag])/2)
         } else function(t, metab.pars, DO.mod.t) {
-          (DO.mod.up(t) + metab.pars[['K600.daily']] * KO2.conv(t) * tt(t) * (DO.sat.up(t) - DO.mod.up(t) + DO.sat.down(t+lag))/2) / (1 + (metab.pars[['K600.daily']] * KO2.conv(t) * tt(t))/2)
+          metab.pars[['K600.daily']] * KO2.conv(t) * tt(t) * ((DO.sat.up(t) + DO.sat.down(t+lag))/2 - (DO.mod.up(t) + DO.mod.t(t+lag))/2)
         }
       } else { # else single-station
         if(integer.t) function(t, metab.pars, DO.mod.t) {
