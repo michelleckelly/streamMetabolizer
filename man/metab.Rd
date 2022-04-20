@@ -54,7 +54,7 @@ depend on the model \code{type}, as follows.
     \tabular{llll}{
       \strong{colname} \tab \strong{class} \tab \strong{units} \tab \strong{need}\cr
       solar.time        \tab POSIXct,POSIXt  \tab                 \tab required      \cr
-      DO.obs            \tab numeric         \tab mgO2 L^-1       \tab required      \cr
+      DO.obs            \tab numeric         \tab mgO2 L^-1       \tab optional      \cr
       DO.sat            \tab numeric         \tab mgO2 L^-1       \tab required      \cr
       depth             \tab numeric         \tab m               \tab required      \cr
       temp.water        \tab numeric         \tab degC            \tab required      \cr
