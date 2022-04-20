@@ -76,7 +76,11 @@
 create_calc_DO <- function(calc_dDOdt, ode_method=environment(calc_dDOdt)$ode_method, err.obs=0) {
   
   # pull out info from the calc_dDOdt closure (all from data)
-  DO.obs.1 <- environment(calc_dDOdt)$data$DO.obs[1]
+  if(is.null(environment(calc_dDOdt)$data$DO.obs[1])) { # two-station data
+    DO.obs.1 <- environment(calc_dDOdt)$data$DO.obs.down[1]
+  } else{ # single-station data
+    DO.obs.1 <- environment(calc_dDOdt)$data$DO.obs[1]
+  }
   t <- environment(calc_dDOdt)$data$t
   
   if(!(ode_method %in% c('Euler','pairmeans'))) {
