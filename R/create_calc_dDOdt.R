@@ -245,9 +245,9 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
       if(is.null(DO.obs)){ # if two-station data
         if(integer.t) function(t, metab.pars) { 
           # This equation follows the two-station equation in Hall et al 2016
-          DO.obs.up[t] + (metab.pars[['GPP.daily']] / depth[t] * mean(light[t:(t+lag)]) / mean.light)
+          metab.pars[['GPP.daily']] / depth[t] * mean(light[t:(t+lag)]) / mean.light
         } else function(t, metab.pars) {
-          DO.obs.up(t) + (metab.pars[['GPP.daily']] / depth(t) * mean(light(t:(t+lag))) / mean.light)
+          metab.pars[['GPP.daily']] / depth(t) * mean(light(t:(t+lag))) / mean.light
         }
       } else { # else single-station data
         if(integer.t) function(t, metab.pars) {
@@ -342,7 +342,7 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
     })(),
     stop('unrecognized deficit_src')
   )
-
+  
   # dDOdt: instantaneous rate of change in DO at time t in gO2 m^-3 timestep^-1
   dDOdt <- switch(
     ode_method,
@@ -375,19 +375,35 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
     # all other methods use a straightforward calculation of dDOdt at values of
     # t and DO.mod.t as requested by the ODE solver
     if(integer.t) function(t, state, metab.pars) { # Euler and euler, b/c trapezoid and pairmeans are covered above
-      list(
-        dDOdt={
-          {GPP(t, metab.pars) + ER(t, metab.pars) + err.proc[t]} / depth[t] +
-            D(t, metab.pars, state[['DO.mod']])} *
-          timestep.days)
-    } else function(t, state, metab.pars) {
-      list(
-        dDOdt={
-          {GPP(t, metab.pars) + ER(t, metab.pars) + err.proc(t)} / depth(t) +
-            D(t, metab.pars, state[['DO.mod']])} *
-          timestep.days)
-    }
-  )
+      if(is.null(DO.obs)){ # two-station
+        list(
+          dDOdt={
+            DO.obs.up[t] + GPP(t, metab.pars) + ER(t, metab.pars) + err.proc[t] +
+              D(t, metab.pars, state[['DO.mod']])} *
+            timestep.days)
+        } else { # single-station
+          list(
+            dDOdt={
+              {GPP(t, metab.pars) + ER(t, metab.pars) + err.proc[t]} / depth[t] +
+                D(t, metab.pars, state[['DO.mod']])} *
+              timestep.days)
+        }
+      } else function(t, state, metab.pars) {
+        if (is.null(DO.obs)){ # two-station
+          list(
+            dDOdt={
+              DO.obs.up(t) + GPP(t, metab.pars) + ER(t, metab.pars) + err.proc(t) +
+                D(t, metab.pars, state[['DO.mod']])} *
+              timestep.days)
+          } else { # single-station
+            list(
+              dDOdt={
+                {GPP(t, metab.pars) + ER(t, metab.pars) + err.proc(t)} / depth(t) +
+                  D(t, metab.pars, state[['DO.mod']])} *
+                timestep.days)
+          }
+        }
+    )
 
   # return the closure, which wraps up the final dDOdt code, light(), DO.sat(),
   # depth(), GPP(), ER(), D(), and anything else defined within create_calc_dDOdt
