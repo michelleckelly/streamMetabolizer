@@ -283,9 +283,9 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
       metab.needs <<- c(metab.needs, 'ER.daily')
       if(is.null(DO.obs)){ # two-station
         if(integer.t) function(t, metab.pars) {
-          metab.pars[['ER.daily']] * tt[t]
+          metab.pars[['ER.daily']] / depth[t] * tt[t]
           } else function(t, metab.pars){
-            metab.pars[['ER.daily']] * tt(t)
+            metab.pars[['ER.daily']] / depth(t) * tt(t)
           }
         } else function(t, metab.pars){ # single-station
         metab.pars[['ER.daily']]
