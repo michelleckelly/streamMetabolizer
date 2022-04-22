@@ -378,9 +378,10 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
       if(is.null(DO.obs)){ # two-station
         list(
           dDOdt={
-            DO.obs.up[t] + GPP(t, metab.pars) + ER(t, metab.pars) + err.proc[t] +
-              D(t, metab.pars, state[['DO.mod']])} *
-            timestep.days)
+            DO.obs.up[t] + GPP(t, metab.pars) + ER(t, metab.pars) + err.proc[t] / depth[t] +
+              D(t, metab.pars, state[['DO.mod']])
+            } * timestep.days
+          )
         } else { # single-station
           list(
             dDOdt={
@@ -392,7 +393,7 @@ create_calc_dDOdt <- function(data, ode_method, GPP_fun, ER_fun, deficit_src, er
         if (is.null(DO.obs)){ # two-station
           list(
             dDOdt={
-              DO.obs.up(t) + GPP(t, metab.pars) + ER(t, metab.pars) + err.proc(t) +
+              DO.obs.up(t) + GPP(t, metab.pars) + ER(t, metab.pars) + err.proc(t) / depth[t] +
                 D(t, metab.pars, state[['DO.mod']])} *
               timestep.days)
           } else { # single-station
